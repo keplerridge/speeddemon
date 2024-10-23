@@ -1,6 +1,13 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import { ref } from 'vue'
+//define reactive variable
+const message = ref('')
+//function
+const greet = () => {
+  message.value = 'Hello, World'
+}
 </script>
 
 <template>
@@ -14,8 +21,16 @@ import HelloWorld from './components/HelloWorld.vue'
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
+
+      
     </div>
   </header>
+  <body>
+    <div>
+      <input type="text" @input="handleInput" />
+      <p>{{ message }}</p>
+    </div>
+  </body>
 
   <RouterView />
 </template>
