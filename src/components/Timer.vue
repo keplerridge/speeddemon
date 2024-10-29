@@ -1,18 +1,19 @@
 <template>
-    <div class="stopwatch-container">
-      <h2>Stopwatch</h2>
-      <p>{{ timeFormatted }}</p>
-      <div class="button-container">
-        <button @click="start">Start</button>
-        <button @click="stop">Stop</button>
-        <button @click="save">Save</button> <!-- Placeholder save button -->
-      </div>
+  <div class="stopwatch-container">
+    <h2>Stopwatch</h2>
+    <p>{{ timeFormatted }}</p>
+    <div class="button-container">
+      <button @click="start">Start</button>
+      <button @click="stop">Stop</button>
+      <button @click="save">Save</button> <!-- Save and reset -->
+      <button @click="deleteTimer">Delete</button> <!-- Reset without saving -->
     </div>
-  </template>
+  </div>
+</template>
   
-  <script>
+<script>
   import axios from 'axios';
-  
+
   export default {
     data() {
       return {
@@ -28,7 +29,7 @@
         const minutes = Math.floor(this.time / 60000) % 60;
         const seconds = Math.floor(this.time / 1000) % 60;
         const milliseconds = Math.floor(this.time % 1000);
-  
+
         return `${this.padTime(hours)}:${this.padTime(minutes)}:${this.padTime(seconds)}.${this.padMilliseconds(milliseconds)}`;
       },
     },
@@ -57,10 +58,26 @@
         console.log("Save button clicked - implement save functionality here");
         console.log("Start Location:", this.startLocation);
         console.log("Stop Location:", this.stopLocation);
+        
+        // Reset after saving
+        this.reset();
+      },
+      deleteTimer() {
+        // Simply reset without saving
+        console.log("Delete button clicked - stopwatch reset without saving");
+        this.reset();
+      },
+      reset() {
+        // Clears the stopwatch and location data
+        clearInterval(this.interval);
+        this.interval = null;
+        this.time = 0;
+        this.startLocation = null;
+        this.stopLocation = null;
       },
       fetchLocation(action) {
-        const API_KEY = process.env.VUE_APP_GOOGLE_API_KEY; // Access the API key from the .env file
-  
+        const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY; // Grab API key
+
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition((position) => {
             const { latitude, longitude } = position.coords;
@@ -91,9 +108,9 @@
       clearInterval(this.interval);
     },
   };
-  </script>
+</script>
   
-  <style scoped>
+<style scoped>
   .stopwatch-container {
     border: 2px solid black;
     padding: 20px;
@@ -101,16 +118,16 @@
     flex-direction: column;
     align-items: center;
   }
-  
+
   .button-container {
     display: flex;
     justify-content: center;
   }
-  
+
   button {
     margin: 5px;
     padding: 10px 20px;
     font-size: 16px;
   }
-  </style>
+</style>
   
