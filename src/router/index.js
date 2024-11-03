@@ -1,33 +1,43 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
 import Dashboard from "../views/Dashboard.vue";
+import Login from "../views/Login.vue";
+import Logout from "../views/Logout.vue";
+import SignUp from "../views/SignUp.vue";
+import NewActivity from "../views/NewActivity.vue";
+import NotFound from "../views/NotFound.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: "/login",
+      name: "login",
+      component: Login,
+    },
+    {
+      path: "/logout",
+      name: "logout",
+      component: Logout,
+    },
+    {
+      path: "/sign-up",
+      name: "sign-up",
+      component: SignUp,
+    },
     {
       path: "/",
       name: "dashboard",
       component: Dashboard,
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      path: "/new-activity",
+      name: "new-activity",
+      component: NewActivity,
     },
     {
-      path: '/Timer',
-      name: 'Timer',
-      component: () => import('../components/Timer.vue')
-    }
-  ]
-})
-      path: "/new-route",
-      name: "new-route",
-      // component: HomeView
+      path: "/:catchAll(.*)",
+      name: "NotFound",
+      component: NotFound,
     },
   ],
 });
