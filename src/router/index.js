@@ -25,11 +25,5 @@ const router = createRouter({
     }
   ]
 })
-      path: "/new-route",
-      name: "new-route",
-      // component: HomeView
-    },
-  ],
-});
 
 export default router;
