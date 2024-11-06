@@ -1,5 +1,9 @@
 <script>
-// imports here
+import NewActivityForm from "../components/NewActivityForm.vue";
+
+export default {
+  components: {},
+};
 </script>
 
 <template>
