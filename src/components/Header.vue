@@ -1,37 +1,37 @@
 <template>
-    <header>
-      <nav>
-        <ul>
-          <li><a href="/Log-out">Log-out</a></li>
-          <li><a href="/New-route">New-route</a></li>
-          <li><a href="/Dashboard">Dashboard</a></li>
-        </ul>
-      </nav>
-    </header>
-  </template>
-  
-  <script>
-  export default {
-    name: "HeaderComponent",
-  };
-  </script>
-  
-  <style scoped>
-  header {
-    background-color: #333;
-    padding: 1rem;
-    color: white;
-  }
-  
-  nav ul {
-    list-style: none;
-    display: flex;
-    gap: 1rem;
-  }
-  
-  nav a {
-    color: white;
-    text-decoration: none;
-  }
-  </style>
-  
+  <header class="bg-slate-800 text-2xl text-white p-4">
+    <nav>
+      <ul class="list-none flex justify-between items-center w-full">
+        <div class="flex gap-4">
+          <li>
+            <a href="/" class="text-white no-underline hover:underline">
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a
+              href="/new-activity"
+              class="text-white no-underline hover:underline"
+            >
+              New Activity
+            </a>
+          </li>
+        </div>
+        <li>
+          <a
+            href="/logout"
+            class="text-white no-underline mr-4 hover:underline"
+          >
+            Logout
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+</template>
+
+<script>
+export default {
+  name: "Header",
+};
+</script>
