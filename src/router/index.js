@@ -38,8 +38,25 @@ const router = createRouter({
       path: "/:catchAll(.*)",
       name: "NotFound",
       component: NotFound,
+      path: "/about",
+      name: "about",
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import("../views/AboutView.vue"),
+    },
+    {
+      path: "/Timer",
+      name: "Timer",
+      component: () => import("../components/Timer.vue"),
     },
   ],
 });
+//       path: "/new-route",
+//       name: "new-route",
+//       // component: HomeView
+//     },
+//   ],
+// });
 
 export default router;

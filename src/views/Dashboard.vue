@@ -19,6 +19,11 @@ export default {
   //     console.error("Error fetching activities:", error);
   //   }
   // },
+
+import NewActivityForm from "../components/NewActivityForm.vue";
+
+export default {
+  components: {},
 };
 </script>
 
