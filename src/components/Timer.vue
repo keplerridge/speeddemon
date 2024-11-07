@@ -19,8 +19,8 @@
       return {
         time: 0,
         interval: null,
-        startLocation: null, // to store the starting location
-        stopLocation: null,  // to store the stopping location
+        startCoords: { lat: null, lng: null }, // to store the starting coordinates
+        stopCoords: { lat: null, lng: null },  // to store the stopping coordinates
       };
     },
     computed: {
@@ -54,11 +54,13 @@
         this.fetchLocation('stop'); // Capture location when stopping
       },
       save() {
-        // Placeholder for saving functionality
-        console.log("Save button clicked - implement save functionality here");
-        console.log("Start Location:", this.startLocation);
-        console.log("Stop Location:", this.stopLocation);
-        
+        // Save only latitude and longitude to the database
+        this.saveToDatabase({
+          startCoords: this.startCoords,
+          stopCoords: this.stopCoords,
+          time: this.timeFormatted
+        });
+
         // Reset after saving
         this.reset();
       },
@@ -72,8 +74,8 @@
         clearInterval(this.interval);
         this.interval = null;
         this.time = 0;
-        this.startLocation = null;
-        this.stopLocation = null;
+        this.startCoords = { lat: null, lng: null };
+        this.stopCoords = { lat: null, lng: null };
       },
       fetchLocation(action) {
         const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY; // Grab API key
@@ -81,28 +83,31 @@
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition((position) => {
             const { latitude, longitude } = position.coords;
-            axios
-              .get(
-                `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${API_KEY}`
-              )
-              .then((response) => {
-                const location = response.data.results[0].formatted_address;
-                if (action === 'start') {
-                  this.startLocation = location; // Store location when starting
-                  console.log("Start Location captured:", this.startLocation);
-                } else if (action === 'stop') {
-                  this.stopLocation = location; // Store location when stopping
-                  console.log("Stop Location captured:", this.stopLocation);
-                }
-              })
-              .catch((error) => {
-                console.error("Error fetching location:", error);
-              });
+            
+            // Store raw coordinates without the formatted address
+            if (action === 'start') {
+              this.startCoords = { lat: latitude, lng: longitude };
+              console.log("Start Coordinates captured:", this.startCoords);
+            } else if (action === 'stop') {
+              this.stopCoords = { lat: latitude, lng: longitude };
+              console.log("Stop Coordinates captured:", this.stopCoords);
+            }
           });
         } else {
           console.error("Geolocation is not supported by this browser.");
         }
       },
+      saveToDatabase(data) {
+        // Placeholder for database saving logic.
+        // Here you would make an axios POST request to your backend API endpoint.
+        axios.post('https://your-backend-api.com/save-location', data)
+          .then(response => {
+            console.log("Data saved to the database successfully:", response.data);
+          })
+          .catch(error => {
+            console.error("Error saving data to the database:", error);
+          });
+      }
     },
     beforeDestroy() {
       clearInterval(this.interval);
@@ -130,4 +135,3 @@
     font-size: 16px;
   }
 </style>
-  

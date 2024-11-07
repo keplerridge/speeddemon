@@ -46,17 +46,11 @@ const router = createRouter({
       component: () => import("../views/AboutView.vue"),
     },
     {
-      path: "/Timer",
-      name: "Timer",
-      component: () => import("../components/Timer.vue"),
-    },
-  ],
+      path: '/timer',
+      name: 'timer',
+      component: () => import('../components/Timer.vue')
+    }
+  ]
 });
-//       path: "/new-route",
-//       name: "new-route",
-//       // component: HomeView
-//     },
-//   ],
-// });
 
 export default router;
