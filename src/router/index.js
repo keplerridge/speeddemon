@@ -40,17 +40,13 @@ const router = createRouter({
       component: NotFound,
       path: "/about",
       name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import("../views/AboutView.vue"),
     },
     {
-      path: '/timer',
-      name: 'timer',
-      component: () => import('../components/Timer.vue')
-    }
-  ]
+      path: "/timer",
+      name: "timer",
+      component: () => import("../components/Timer.vue"),
+    },
+  ],
 });
 
 export default router;

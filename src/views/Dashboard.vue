@@ -1,30 +1,32 @@
+//
 <script>
-import ActivityCard from "../components/ActivityCard.vue";
-// import axios from "axios";
+// import ActivityCard from "../components/ActivityCard.vue";
+// // import axios from "axios";
 
-export default {
-  components: {
-    ActivityCard,
-  },
-  data() {
-    return {
-      activities: [],
-    };
-  },
-  // async mounted() {
-  //   try {
-  //     const response = await axios.get('/api/activities');
-  //     this.activities = response.data;
-  //   } catch (error) {
-  //     console.error("Error fetching activities:", error);
-  //   }
-  // },
+// export default {
+//   components: {
+//     ActivityCard,
+//   },
+//   data() {
+//     return {
+//       activities: [],
+//     };
+//   },
+//   async mounted() {
+//     try {
+//       const response = await axios.get('/api/activities');
+//       this.activities = response.data;
+//     } catch (error) {
+//       console.error("Error fetching activities:", error);
+//     }
+//   },
 
-import NewActivityForm from "../components/NewActivityForm.vue";
+// import NewActivityForm from "../components/NewActivityForm.vue";
 
-export default {
-  components: {},
-};
+// export default {
+//   components: {},
+// };
+//
 </script>
 
 <template>
