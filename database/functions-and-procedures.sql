@@ -71,9 +71,18 @@ RETURNS double precision AS
     END;
     $$ LANGUAGE plpgsql;
 
+
+CREATE FUNCTION CalculateTimeElapsed(starttime TIMESTAMP, endtime TIMESTAMP)
+RETURNS TIME AS
+$$
+    BEGIN
+        RETURN (endtime - starttime)::TIME;
+    END
+$$ LANGUAGE plpgsql;
+
 --Adresses issue where autoincrementing was not working
-CREATE SEQUENCE speeddemonschema.user_id_seq START WITH 1 INCREMENT BY 1
-CREATE SEQUENCE speeddemonschema.log_id_seq START WITH 1 INCREMENT BY 1
+CREATE SEQUENCE speeddemonschema.user_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE speeddemonschema.log_id_seq START WITH 1 INCREMENT BY 1;
 
 --IMPORTANT NOTE: Data must be read from user end in THIS order:
     --username
@@ -121,11 +130,8 @@ CREATE OR REPLACE PROCEDURE InsertActivityLogData(
              v_log_id := nextval('speeddemonschema.log_id_seq');
 
 
-             INSERT INTO speeddemonschema.users (user_id, username, email)
-                 VALUES(v_user_id, p_user_name,p_user_email );
-
-             INSERT INTO speeddemonschema.passwords (user_id, user_pass)
-                 VALUES(v_user_id, p_password);
+             INSERT INTO speeddemonschema.users (user_id, username, email, password)
+                 VALUES(v_user_id, p_user_name,p_user_email, p_password );
 
              INSERT INTO speeddemonschema.activity_log (log_id, mode_of_transport, user_id, time_elapsed, distance_traveled)
                  VALUES (v_log_id, p_mode_of_transport, v_user_id, v_time_elapsed, null);
@@ -141,8 +147,7 @@ CREATE OR REPLACE PROCEDURE InsertActivityLogData(
              WHEN OTHERS THEN
              RAISE NOTICE 'Error occurred, Data Not Added: %', SQLERRM;
          END;
-     $$
-
+     $$;
 
 CALL InsertActivityLogData(
     'harris',
