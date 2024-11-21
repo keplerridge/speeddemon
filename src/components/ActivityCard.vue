@@ -2,7 +2,7 @@
     <div>
         <h1>Activity Data</h1>
         <ul>
-            <li v-for="activity in activities" :key="activity.log_id">
+            <li v-for="activity in activityInfo" :key="activity.log_id">
                 <p>Username: {{ activity.username }}</p>
                 <p>Distance: {{ activity.distance }}</p>
                 <p>Time: {{ activity.timeElapsed }}</p>
@@ -16,6 +16,7 @@
 import axios from 'axios';
 
 export default {
+    name: 'ActivityCard',
     data() {
         return {
             activityInfo: []  // This will hold the activities fetched from the database
@@ -49,3 +50,20 @@ export default {
     }
 };
 </script>
+
+<template>
+    <div>
+        <h2 class="text-xl font-bold mb-4">Activity Data</h2>
+        <ul>
+            <li
+                v-for="activity in activityInfo"
+                :key="activity.id"
+                class="p-4 border rounded mb-2">
+                <p><strong>Username:</strong> {{ activity.username }}</p>
+                <p><strong>Distance:</strong> {{ activity.distance }}</p>
+                <p><strong>Time:</strong> {{ activity.timeElapsed }}</p>
+                <p><strong>Mode of Transport:</strong> {{ activity.modeOfTransport }}</p>
+            </li>
+        </ul>
+    </div>
+</template>
