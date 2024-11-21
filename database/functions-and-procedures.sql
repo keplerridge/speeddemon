@@ -149,6 +149,7 @@ CREATE OR REPLACE PROCEDURE InsertActivityLogData(
          END;
      $$;
 
+--Example Call of Procedure InsertActivityLogData
 CALL InsertActivityLogData(
     'harris',
     'hayden@sutff.com',

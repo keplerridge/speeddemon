@@ -11,6 +11,8 @@ app.use(cors(
     {origin: '*'}
 ));
 
+//BEGIN RETRIEVING INFO
+//////////////////////////////////////////////
 //Opens a "pool" where the database conneciton is stored
 const pool = new Pool({
     user: "speeddemon_user", //from render
@@ -80,6 +82,10 @@ app.get('/database/query', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
+
+//BEGIN SEDNING INFO
+////////////////////////////////////////////
+
 
 //Check for proper communication with ports.
 app.listen(port, () => {
