@@ -11,6 +11,8 @@ app.use(cors(
     {origin: '*'}
 ));
 
+app.use(express.json());
+
 //BEGIN RETRIEVING INFO
 //////////////////////////////////////////////
 //Opens a "pool" where the database conneciton is stored
@@ -85,7 +87,63 @@ app.get('/database/query', async (req, res) => {
 
 //BEGIN SEDNING INFO
 ////////////////////////////////////////////
+app.post('/database/insert', async (req, res) => {
+    const {
+        userName,
+        userEmail,
+        password,
+        startLat,
+        startLong,
+        endLat,
+        endLong,
+        startTime,
+        endTime,
+        modeOfTransport
+    } = req.body;
 
+    // Validate required fields
+    if (
+        !userName ||
+        !userEmail ||
+        !password ||
+        startLat === undefined ||
+        startLong === undefined ||
+        endLat === undefined ||
+        endLong === undefined ||
+        !startTime ||
+        !endTime ||
+        !modeOfTransport
+    ) {
+        return res.status(400).send('All fields are required');
+    }
+
+    try {
+        const query = `
+            CALL InsertActivityLogData(
+                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+            );
+        `;
+
+        // Execute the query with parameters
+        await pool.query(query, [
+            userName,
+            userEmail,
+            password,
+            startLat,
+            startLong,
+            endLat,
+            endLong,
+            startTime,
+            endTime,
+            modeOfTransport
+        ]);
+
+        res.status(200).send('Data inserted successfully');
+    } catch (error) {
+        console.error('Error executing query:', error);
+        res.status(500).send('Server error');
+    }
+});
 
 //Check for proper communication with ports.
 app.listen(port, () => {
