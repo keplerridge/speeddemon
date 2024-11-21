@@ -1,16 +1,4 @@
-<template>
-    <div>
-        <h1>Activity Data</h1>
-        <ul>
-            <li v-for="activity in activityInfo" :key="activity.log_id">
-                <p>Username: {{ activity.username }}</p>
-                <p>Distance: {{ activity.distance }}</p>
-                <p>Time: {{ activity.timeElapsed }}</p>
-                <p>Mode of Transport: {{ activity.modeOfTransport }}</p>
-            </li>
-        </ul>
-    </div>
-</template>
+
 
 <script>
 import axios from 'axios';
@@ -32,10 +20,10 @@ export default {
     methods: {
         async fetchData() {
             try {
-                const response = await axios.get('http://localhost:3000/database/activityInfo');
+                const response = await axios.get(`http://localhost:3000/database/query?queryName=ActivityData`);
                 //response.data = makes an array of objects from the response
                 //.map() = creates a new arrray with the shortened names as specified on the left hand side of the request
-                this.acitivityInfo = response.data.map (activity => ({
+                this.activityInfo = response.data.map (activity => ({
                     username: activity.username,
                     email: activity.email,
                     password: activity.password,
