@@ -20,7 +20,7 @@ export default {
     methods: {
         async fetchData() {
             try {
-                const response = await axios.get(`http://localhost:3000/database/query?queryName=ActivityData`);
+                const response = await axios.get(`http://localhost:3000/database/query?queryName=ActivityData`); // Replace "ActivityData with queryName you want"
                 //response.data = makes an array of objects from the response
                 //.map() = creates a new arrray with the shortened names as specified on the left hand side of the request
                 this.activityInfo = response.data.map (activity => ({

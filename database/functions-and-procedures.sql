@@ -148,6 +148,7 @@ CREATE OR REPLACE PROCEDURE InsertActivityLogData(
              RAISE NOTICE 'Error occurred, Data Not Added: %', SQLERRM;
          END;
 
+--Example Call of Procedure InsertActivityLogData
 CALL InsertActivityLogData(
     'harris',
     'hayden@sutff.com',

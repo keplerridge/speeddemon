@@ -4,6 +4,7 @@ import Login from "../views/Login.vue";
 import Logout from "../views/Logout.vue";
 import SignUp from "../views/SignUp.vue";
 import NewActivity from "../views/NewActivity.vue";
+import TestForSending from "../views/TestForSending.vue";
 import NotFound from "../views/NotFound.vue";
 
 const router = createRouter({
@@ -33,6 +34,11 @@ const router = createRouter({
       path: "/new-activity",
       name: "new-activity",
       component: NewActivity,
+    },
+    {
+      path: "/TestForSending",
+      name: "TestForSending",
+      component: TestForSending,
     },
     {
       path: "/:catchAll(.*)",
