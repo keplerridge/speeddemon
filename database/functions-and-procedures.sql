@@ -84,6 +84,7 @@ $$ LANGUAGE plpgsql;
 CREATE SEQUENCE speeddemonschema.user_id_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE speeddemonschema.log_id_seq START WITH 1 INCREMENT BY 1;
 
+
 --IMPORTANT NOTE: Data must be read from user end in THIS order:
     --username
     --email
@@ -95,7 +96,6 @@ CREATE SEQUENCE speeddemonschema.log_id_seq START WITH 1 INCREMENT BY 1;
     --start time ('YYYY-MM-DD HH:MM:SS.mmm')
     --end time ('YYYY-MM-DD HH:MM:SS.mmm')
     --mode of transport
-
 CREATE OR REPLACE PROCEDURE InsertActivityLogData(
                              p_user_name VARCHAR(20),
                              p_user_email VARCHAR(30),
@@ -147,7 +147,6 @@ CREATE OR REPLACE PROCEDURE InsertActivityLogData(
              WHEN OTHERS THEN
              RAISE NOTICE 'Error occurred, Data Not Added: %', SQLERRM;
          END;
-     $$;
 
 CALL InsertActivityLogData(
     'harris',
@@ -161,3 +160,5 @@ CALL InsertActivityLogData(
     '2024-11-07 15:45:00',
     'bike'
 );
+
+
