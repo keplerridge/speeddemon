@@ -17,10 +17,10 @@
   export default {
     data() {
       return {
-        time: 0,
+        time: 0, // Add this line to define 'time' property
         interval: null,
-        startCoords: { lat: null, lng: null }, // to store the starting coordinates
-        stopCoords: { lat: null, lng: null },  // to store the stopping coordinates
+        startCoords: { lat: null, lng: null },
+        stopCoords: { lat: null, lng: null },
       };
     },
     computed: {
@@ -61,7 +61,7 @@
           time: this.timeFormatted
         });
 
-        
+
 
         // Reset after saving
         this.reset();
@@ -99,10 +99,35 @@
           console.error("Geolocation is not supported by this browser.");
         }
       },
+
+      //send lat and lang individually so database can format its own custom LatLang data type
       saveToDatabase(data) {
-        // Placeholder for database saving logic.
-        // Here you would make an axios POST request to your backend API endpoint.
-        axios.post('https://your-backend-api.com/save-location', data)
+        const startLat = data.startCoords.lat;
+        const startLong = data.startCoords.lng;
+
+        const endLat = data.stopCoords.lat;
+        const endLong = data.stopCoords.lng;
+
+        console.log( 'Sending Data to Database', {
+          userName: 'amy',  //NEED TO GET ACTUAL USERNAME
+          startLat,
+          startLong,
+          endLat,
+          endLong,
+          timeElapsed: data.time,
+          modeOfTransport: 'car' });
+
+        axios.post('http://localhost:3000/database/insertActivityLog', {
+          userName: 'kayden',  //NEED TO GET ACTUAL USERNAME
+          startLat,
+          startLong,
+          endLat,
+          endLong,
+          timeElapsed: data.time,
+          modeOfTransport: 'car'  //NEED TO GET USER INPUT SOMEHOW
+        })
+
+      
           .then(response => {
             console.log("Data saved to the database successfully:", response.data);
           })

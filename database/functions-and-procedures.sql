@@ -1,16 +1,5 @@
-create or replace function MakeStartAndEndTime(starttime TIMESTAMP, endtime TIMESTAMP)
-RETURNS speeddemonschema.startendtime AS
-    $$
-    DECLARE
-        result speeddemonschema.STARTENDTIME;
-    BEGIN
-        result.start_time := starttime;
-        result.end_time := endtime;
-    RETURN result;
-    END;
-    $$ LANGUAGE plpgsql;
 
-drop function makelatlangdatapoint(latitude double precision, longitude double precision)
+
 create or replace function MakeLatLangDataPoint(latitude double precision, longitude double precision)
 RETURNS speeddemonschema.LATLANG AS
     $$
@@ -66,27 +55,11 @@ RETURNS double precision AS
 
             totalDistance := totalDistance + HaservineEquation(changeInLat, changeInLong, latStart, latEnd);
 
-        RETURN totalDistance;
+
+        RETURN ROUND(totalDistance, 2);
 
     END;
     $$ LANGUAGE plpgsql;
-
-
-CREATE FUNCTION CalculateTimeElapsed(starttime TIMESTAMP, endtime TIMESTAMP)
-RETURNS TIME AS
-$$
-    BEGIN
-        RETURN (endtime - starttime)::TIME;
-    END
-$$ LANGUAGE plpgsql;
-
-CREATE FUNCTION HashPassword(password VARCHAR(20))
-RETURN BIGINT AS
-$$
-    BEGIN
-
-    END
-$$ LANGUAGE plpgsql;
 
 --Adresses issue where autoincrementing was not working
 CREATE SEQUENCE speeddemonschema.user_id_seq START WITH 1 INCREMENT BY 1;
@@ -126,12 +99,9 @@ CREATE OR REPLACE PROCEDURE InsertNewUser(p_user_name VARCHAR(20),
 
 CREATE OR REPLACE PROCEDURE InsertActivityLogData(
                              p_username varchar(20),
-                             p_start_point_lat double precision,
-                             p_start_point_long double precision,
-                             p_end_point_lat double precision,
-                             p_end_point_long double precision,
-                             p_start_time TIMESTAMP,
-                             p_end_time TIMESTAMP,
+                             p_start_position speeddemonschema.latlang,
+                             p_end_position speeddemonschema.latlang,
+                             p_time_elapsed TIME,
                              p_mode_of_transport VARCHAR(20)
                             )
 
@@ -140,17 +110,11 @@ CREATE OR REPLACE PROCEDURE InsertActivityLogData(
          DECLARE
              v_user_id INTEGER := 0;
              v_log_id INTEGER:= 0;
-             v_start_point speeddemonschema.latlang;
-             v_end_point speeddemonschema.latlang;
-             v_time_elapsed time;
              v_total_distance_traveled double precision;
 
 
          BEGIN
-             v_start_point := MakeLatLangDataPoint(p_start_point_lat, p_start_point_long);
-             v_end_point := MakeLatLangDataPoint(p_end_point_lat, p_end_point_long);
-             v_time_elapsed := CalculateTimeElapsed(p_start_time, p_end_time);
-             v_total_distance_traveled := calculatetotaldistance(v_start_point, v_end_point);
+             v_total_distance_traveled := calculatetotaldistance(p_start_position, p_end_position);
              v_log_id := nextval('speeddemonschema.log_id_seq');
 
              --Sets value of v_user_id using p_username to satisfy foreign key constraints
@@ -159,10 +123,10 @@ CREATE OR REPLACE PROCEDURE InsertActivityLogData(
                 WHERE username = p_username;
 
              INSERT INTO speeddemonschema.activity_log (log_id, mode_of_transport, user_id, time_elapsed, distance_traveled)
-                 VALUES (v_log_id, p_mode_of_transport, v_user_id, v_time_elapsed, null);
+                 VALUES (v_log_id, p_mode_of_transport, v_user_id, p_time_elapsed, null);
 
              INSERT INTO speeddemonschema.location_tracker (log_id, start_point, end_point)
-                 VALUES (v_log_id, v_start_point,v_end_point);
+                 VALUES (v_log_id, p_start_position, p_end_position);
 
              UPDATE speeddemonschema.activity_log
                  SET distance_traveled = v_total_distance_traveled
@@ -180,31 +144,26 @@ CREATE OR REPLACE PROCEDURE InsertActivityLogData(
     -- email,
     -- password
 CALL InsertNewUser(
-    'harris',
-    'hayden@sutff.com',
-    'mypassword'
+    'amy',
+    'amy@sutff.com',
+    'pass'
      );
 
 --EXAMPLE CALL OF PROCEDURE InsertActivityLogData
 -- Must Insert in this order
-    --username,
-    --start latitude,
-    --stat longitude,
-    --end latitude,
-    --end longitude,
-    --start time,
-    --end time,
+    --username
+    --start position latlang
+    --end position latlang
+    -- time elapsed
     --mode of transport
 CALL InsertActivityLogData(
-    'harris',
-    43.628184,
-    -111.773525,
-    43.716342,
-    -111.765832,
-    '2024-11-07 10:35:20',
-    '2024-11-07 15:45:00',
+    'amy',
+    (43.628184,-111.773525),
+     (43.716342, -111.765832),
+    '15:45:00',
     'bike'
     );
+
 
 
 
