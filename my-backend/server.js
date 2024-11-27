@@ -3,6 +3,7 @@ const fs = require('fs'); //fs means filesystem
 const path = require('path');
 const { Pool } = require('pg');
 const cors = require('cors');
+const env = require('dotenv').config();
 
 const app = express();
 const port = 3000;
@@ -17,13 +18,17 @@ app.use(express.json());
 //////////////////////////////////////////////
 //Opens a "pool" where the database conneciton is stored
 const pool = new Pool({
-    user: "speeddemon_user", //from render
-    host: "dpg-csr1hqjgbbvc73aug230-a.oregon-postgres.render.com", //from render
-    password: "jzLaCQzC4jo56XHhFEF5xIR9xEoSATXI", //from render
-    database: "speeddemon",
+    user: 'speeddemon_user', //from render
+    host: 'dpg-csr1hqjgbbvc73aug230-a.oregon-postgres.render.com', //from render
+    password: 'jzLaCQzC4jo56XHhFEF5xIR9xEoSATXI', //from render
+    database: 'speeddemon',
     port: 5432,
     ssl: { rejectUnauthorized: false }
-});
+}); 
+
+
+
+
 
 //Handels CORS request which deals with using two different ports
     // (3000 for the front end stuff, but 5173 for 'dev' location)
@@ -85,13 +90,48 @@ app.get('/database/query', async (req, res) => {
     }
 });
 
+
 //BEGIN SEDNING INFO
 ////////////////////////////////////////////
-app.post('/database/insert', async (req, res) => {
+
+
+/*General Format is as follows:
+    Creates a variable which will hold all the appropriate info
+    Validation for existance of data being filled is checked
+    Procedure is placed in a variable (query)
+    the query is exectues with the given parameters
+    errors are caught*/
+
+
+
+// BEGIN INSERT NEW USER
+app.post('/database/insertUser', async (req, res) => {
+    const { userName, userEmail, password } = req.body;
+
+    // Validate required fields
+    if (!userName || !userEmail || !password) {
+        return res.status(400).send('All fields are required');
+    }
+
+    try {
+        const query = `
+            CALL InsertNewUser($1, $2, $3);
+        `;
+
+        // Execute the query with parameters
+        await pool.query(query, [userName, userEmail, password]);
+
+        res.status(200).send('User inserted successfully');
+    } catch (error) {
+        console.error('Error executing query:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+// BEGIN INSERT ACTIVITY LOG
+app.post('/database/insertActivityLog', async (req, res) => {
     const {
         userName,
-        userEmail,
-        password,
         startLat,
         startLong,
         endLat,
@@ -104,8 +144,6 @@ app.post('/database/insert', async (req, res) => {
     // Validate required fields
     if (
         !userName ||
-        !userEmail ||
-        !password ||
         startLat === undefined ||
         startLong === undefined ||
         endLat === undefined ||
@@ -120,15 +158,13 @@ app.post('/database/insert', async (req, res) => {
     try {
         const query = `
             CALL InsertActivityLogData(
-                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+                $1, $2, $3, $4, $5, $6, $7, $8
             );
         `;
 
         // Execute the query with parameters
         await pool.query(query, [
             userName,
-            userEmail,
-            password,
             startLat,
             startLong,
             endLat,
@@ -138,7 +174,7 @@ app.post('/database/insert', async (req, res) => {
             modeOfTransport
         ]);
 
-        res.status(200).send('Data inserted successfully');
+        res.status(200).send('Activity log inserted successfully');
     } catch (error) {
         console.error('Error executing query:', error);
         res.status(500).send('Server error');

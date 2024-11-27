@@ -61,6 +61,8 @@
           time: this.timeFormatted
         });
 
+        
+
         // Reset after saving
         this.reset();
       },
