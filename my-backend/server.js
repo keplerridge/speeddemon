@@ -18,13 +18,13 @@ app.use(express.json());
 //////////////////////////////////////////////
 //Opens a "pool" where the database conneciton is stored
 const pool = new Pool({
-    user: 'speeddemon_user', //from render
-    host: 'dpg-csr1hqjgbbvc73aug230-a.oregon-postgres.render.com', //from render
-    password: 'jzLaCQzC4jo56XHhFEF5xIR9xEoSATXI', //from render
-    database: 'speeddemon',
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_DATABASE,
     port: 5432,
     ssl: { rejectUnauthorized: false }
-}); 
+});
 
 
 
@@ -136,8 +136,7 @@ app.post('/database/insertActivityLog', async (req, res) => {
         startLong,
         endLat,
         endLong,
-        startTime,
-        endTime,
+        timeElapsed,
         modeOfTransport
     } = req.body;
 
@@ -148,8 +147,7 @@ app.post('/database/insertActivityLog', async (req, res) => {
         startLong === undefined ||
         endLat === undefined ||
         endLong === undefined ||
-        !startTime ||
-        !endTime ||
+        !timeElapsed ||
         !modeOfTransport
     ) {
         return res.status(400).send('All fields are required');
@@ -158,10 +156,14 @@ app.post('/database/insertActivityLog', async (req, res) => {
     try {
         const query = `
             CALL InsertActivityLogData(
-                $1, $2, $3, $4, $5, $6, $7, $8
+                $1, 
+                MakeLatLangDataPoint($2, $3),
+                MakeLatLangDataPoint($4, $5),
+                $6, 
+                $7
             );
         `;
-
+        
         // Execute the query with parameters
         await pool.query(query, [
             userName,
@@ -169,8 +171,7 @@ app.post('/database/insertActivityLog', async (req, res) => {
             startLong,
             endLat,
             endLong,
-            startTime,
-            endTime,
+            timeElapsed,
             modeOfTransport
         ]);
 
