@@ -1,20 +1,24 @@
+//To see this in action, add /TestForSending at the end of your URL
+
 <template>
-    <div>
-      <form @submit.prevent="submitActivityData">
-        <input v-model="userName" type="text" placeholder="Username" required />
-        <input v-model="userEmail" type="email" placeholder="Email" required />
-        <input v-model="password" type="password" placeholder="Password" required />
-        <input v-model="startLat" type="number" placeholder="Start Latitude" required />
-        <input v-model="startLong" type="number" placeholder="Start Longitude" required />
-        <input v-model="endLat" type="number" placeholder="End Latitude" required />
-        <input v-model="endLong" type="number" placeholder="End Longitude" required />
-        <input v-model="startTime" type="datetime-local" required />
-        <input v-model="endTime" type="datetime-local" required />
-        <input v-model="modeOfTransport" type="text" placeholder="Mode of Transport" required />
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-  </template>
+  <div>
+    <h2>User Information</h2>
+    <input v-model="userName" placeholder="Username" />
+    <input v-model="userEmail" placeholder="Email" type="email" />
+    <input v-model="password" placeholder="Password" type="password" />
+    <button @click="submitUserData">Submit User Data</button>
+
+    <h2>Activity Log</h2>
+    <input v-model.number="startLat" placeholder="Start Latitude" type="number" />
+    <input v-model.number="startLong" placeholder="Start Longitude" type="number" />
+    <input v-model.number="endLat" placeholder="End Latitude" type="number" />
+    <input v-model.number="endLong" placeholder="End Longitude" type="number" />
+    <input v-model="startTime" placeholder="Start Time (YYYY-MM-DD HH:MM:SS)" />
+    <input v-model="endTime" placeholder="End Time (YYYY-MM-DD HH:MM:SS)" />
+    <input v-model="modeOfTransport" placeholder="Mode of Transport" />
+    <button @click="submitActivityLogData">Submit Activity Log</button>
+  </div>
+</template>
 
 <script>
 import axios from 'axios';
@@ -35,12 +39,35 @@ export default {
     };
   },
   methods: {
-    async submitActivityData() {
+
+    //Specifically submits users data
+    async submitUserData() {
       try {
-        const data = {
+
+        //Creates an array containing this info
+        const userData = {
           userName: this.userName,
           userEmail: this.userEmail,
-          password: this.password,
+          password: this.password
+        };
+
+        //Puts information at that temporary /database/insertUser address 
+        const response = await axios.post('http://localhost:3000/database/insertUser', userData);
+
+        if (response.status === 200) {
+          alert('User data inserted successfully');
+        }
+      } catch (error) {
+        console.error('Error inserting user data:', error);
+        alert('Failed to insert user data');
+      }
+    },
+
+    //Specifically submits aciticty log data
+    async submitActivityLogData() {
+      try {
+        const activityData = {
+          userName: this.userName,
           startLat: this.startLat,
           startLong: this.startLong,
           endLat: this.endLat,
@@ -49,15 +76,16 @@ export default {
           endTime: this.endTime,
           modeOfTransport: this.modeOfTransport
         };
-
-        const response = await axios.post('http://localhost:3000/database/insert', data);
+        
+        //temporarily sends info to the /database/insertActivityLog location
+        const response = await axios.post('http://localhost:3000/database/insertActivityLog', activityData);
 
         if (response.status === 200) {
-          alert('Data inserted successfully');
+          alert('Activity log inserted successfully');
         }
       } catch (error) {
-        console.error('Error inserting data:', error);
-        alert('Failed to insert data');
+        console.error('Error inserting activity log:', error);
+        alert('Failed to insert activity log');
       }
     }
   }
