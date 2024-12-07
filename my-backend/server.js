@@ -90,44 +90,6 @@ app.get('/database/query', async (req, res) => {
     }
 });
 
-<<<<<<< HEAD
-// New route to register a user
-app.post('/api/register', async (req, res) => {
-    const { username, email, password } = req.body;
-
-    try {
-        // Encrypt the password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Insert user into `users` table
-        const userResult = await client.query(
-            'INSERT INTO users (username, email) VALUES ($1, $2) RETURNING user_id',
-            [username, email]
-        );
-
-        const userId = userResult.rows[0].user_id;
-
-        // Insert password into `passwords` table
-        await client.query(
-            'INSERT INTO passwords (user_id, user_pass) VALUES ($1, $2)',
-            [userId, hashedPassword]
-        );
-
-        res.status(201).json({ message: 'User created successfully!' });
-    } catch (error) {
-        console.error('Error registering user:', error);
-
-        if (error.code === '23505') {
-            // Unique constraint violation for username or email
-            res.status(400).json({ message: 'Username or email already exists.' });
-        } else {
-            res.status(500).json({ error: 'Internal server error' });
-        }
-    }
-});
-
-// Start the server
-=======
 
 //BEGIN SEDNING INFO
 ////////////////////////////////////////////
@@ -221,7 +183,6 @@ app.post('/database/insertActivityLog', async (req, res) => {
 });
 
 //Check for proper communication with ports.
->>>>>>> de9fa5718831b99cb619cb83355c83763a929caf
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
