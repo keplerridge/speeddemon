@@ -1,6 +1,6 @@
 //
 <script>
-import ActivityCard from "/Users/haydenh/Documents/GitHub/speeddemon/src/components/ActivityCard.vue";
+import ActivityCard from "../components/ActivityCard.vue";
 
 export default {
   name: 'Dashboard',

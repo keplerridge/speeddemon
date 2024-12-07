@@ -40,16 +40,16 @@ export default {
 </script>
 
 <template>
-    <div>
+    <div class="text-center">
         <h2 class="text-xl font-bold mb-4">Activity Data</h2>
         <ul>
             <li
                 v-for="activity in activityInfo"
                 :key="activity.id"
-                class="p-4 border rounded mb-2">
-                <p><strong>Username:</strong> {{ activity.username }}</p>
-                <p><strong>Distance:</strong> {{ activity.distance }}</p>
-                <p><strong>Time:</strong> {{ activity.timeElapsed }}</p>
+                class="p-4 border rounded mb-2 bg-speedDemon-lightBlue" >
+                <p><strong class="bg-speedDemon-orange">Username:</strong> {{ activity.username }}</p>
+                <p><strong class="bg-speedDemon-red">Distance:</strong> {{ activity.distance }}</p>
+                <p><strong class="bg-speedDemon-orange">Time:</strong> {{ activity.timeElapsed }}</p>
                 <p><strong>Mode of Transport:</strong> {{ activity.modeOfTransport }}</p>
             </li>
         </ul>
