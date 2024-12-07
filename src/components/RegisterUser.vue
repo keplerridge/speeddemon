@@ -56,7 +56,7 @@
     methods: {
       async registerUser() {
         try {
-          const response = await fetch('http://localhost:3000/api/register', {
+          const response = await fetch('http://localhost:3000/database/insertUser', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(this.user),
