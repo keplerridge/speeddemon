@@ -109,10 +109,6 @@ app.get('/database/query', async (req, res) => {
 app.post('/database/insertUser', async (req, res) => {
     const { username, email, password } = req.body;
 
-    console.log(username);
-    console.log(email);
-    console.log(password);
-
     // Validate required fields
     if (!username || !email || !password) {
         return res.status(400).json('All fields are required');
@@ -123,10 +119,9 @@ app.post('/database/insertUser', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const query = `CALL InsertNewUser($1, $2, $3);`;
-        console.log(hashedPassword);
+
         // Execute the query with the hashed password
         const result = await pool.query(query, [username, email, hashedPassword]);
-        console.log(result);
 
         res.status(200).json('User inserted successfully');
     } catch (error) {
