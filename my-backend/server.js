@@ -4,6 +4,7 @@ const path = require('path');
 const { Pool } = require('pg');
 const cors = require('cors');
 const env = require('dotenv').config();
+const bcrypt = require('bcrypt'); // used for hashing password
 
 const app = express();
 const port = 3000;
@@ -23,7 +24,7 @@ const pool = new Pool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     port: 5432,
-    ssl: { rejectUnauthorized: false }
+    ssl: { rejectUnauthorized: false },
 });
 
 
@@ -106,25 +107,31 @@ app.get('/database/query', async (req, res) => {
 
 // BEGIN INSERT NEW USER
 app.post('/database/insertUser', async (req, res) => {
-    const { userName, userEmail, password } = req.body;
+    const { username, email, password } = req.body;
+
+    console.log(username);
+    console.log(email);
+    console.log(password);
 
     // Validate required fields
-    if (!userName || !userEmail || !password) {
-        return res.status(400).send('All fields are required');
+    if (!username || !email || !password) {
+        return res.status(400).json('All fields are required');
     }
 
     try {
-        const query = `
-            CALL InsertNewUser($1, $2, $3);
-        `;
+        // Hash the password before saving to the database
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Execute the query with parameters
-        await pool.query(query, [userName, userEmail, password]);
+        const query = `CALL InsertNewUser($1, $2, $3);`;
+        console.log(hashedPassword);
+        // Execute the query with the hashed password
+        const result = await pool.query(query, [username, email, hashedPassword]);
+        console.log(result);
 
-        res.status(200).send('User inserted successfully');
+        res.status(200).json('User inserted successfully');
     } catch (error) {
         console.error('Error executing query:', error);
-        res.status(500).send('Server error');
+        res.status(500).json('Server error');
     }
 });
 
@@ -179,6 +186,17 @@ app.post('/database/insertActivityLog', async (req, res) => {
     } catch (error) {
         console.error('Error executing query:', error);
         res.status(500).send('Server error');
+    }
+});
+
+app.get('/database/getAllUsers', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM speeddemonschema.users');
+        console.log(result); // Log the query result to see if it returns the data
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching users:', error); // Log the actual error
+        res.status(500).json('Server error');
     }
 });
 
