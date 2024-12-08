@@ -15,7 +15,7 @@ create table users
     user_id  serial primary key,
     username varchar(20) not null unique,
     email    varchar(30) unique,
-    password varchar(20) not null
+    password varchar(2000) not null
 );
 
 create table activity_log

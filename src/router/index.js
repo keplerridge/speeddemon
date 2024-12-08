@@ -6,6 +6,7 @@ import SignUp from "../views/SignUp.vue";
 import NewActivity from "../views/NewActivity.vue";
 import TestForSending from "../views/TestForSending.vue";
 import NotFound from "../views/NotFound.vue";
+import RegisterUser from "../components/RegisterUser.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -52,6 +53,11 @@ const router = createRouter({
       name: "timer",
       component: () => import("../components/Timer.vue"),
     },
+    {
+      path: "/register",
+      name: "register",
+      component: RegisterUser
+    }
   ],
 });
 
