@@ -192,7 +192,78 @@ app.get('/database/getAllUsers', async (req, res) => {
     }
 });
 
+app.get('/database/getUser', async (req, res) => {
+  try {
+    // Extract the input (username or email) from the query parameters
+    const input = req.query.input;
+
+    if (!input) {
+      return res.status(400).send({ message: 'Input is required' });
+    }
+
+    // Perform the query directly to get user data based on the input
+    const result = await pool.query(
+      'SELECT user_id, username, email, password FROM speeddemonschema.users WHERE username = $1 OR email = $1',
+      [input]  // Pass the input parameter for dynamic querying
+    );
+
+    // Check if a user was found
+    if (result.rows.length > 0) {
+      res.status(200).json(result.rows[0]);  // Send the first matching user as response
+    } else {
+      res.status(404).send({ message: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    res.status(500).send({ message: 'An error occurred while fetching the user.' });
+  }
+});
+
+app.post('/auth/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  // Validate input
+  if (!username || !password) {
+    return res.status(400).json('Username and password are required');
+  }
+
+  try {
+    // Query the database for the user based on username or email
+    const result = await pool.query(
+      'SELECT user_id, username, email, password FROM speeddemonschema.users WHERE username = $1 OR email = $1',
+      [username]  // Use the username (or email) to query the database
+    );
+
+    if (result.rows.length > 0) {
+      const user = result.rows[0];
+
+      // Compare the password with the hashed password stored in the database
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+
+      if (isPasswordValid) {
+        // Password is correct, you can send a success response or generate a JWT token if needed
+        res.status(200).json({
+          message: 'Login successful',
+          userId: user.user_id,
+          username: user.username,
+        });
+      } else {
+        // Invalid password
+        res.status(401).json('Invalid credentials');
+      }
+    } else {
+      // User not found
+      res.status(404).json('User not found');
+    }
+  } catch (error) {
+    console.error('Error logging in:', error);
+    res.status(500).json('Server error');
+  }
+});
+
 //Check for proper communication with ports.
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
+
+
