@@ -66,27 +66,40 @@ CREATE SEQUENCE speeddemonschema.user_id_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE speeddemonschema.log_id_seq START WITH 1 INCREMENT BY 1;
 
 
+CREATE OR REPLACE PROCEDURE InsertNewUser(
+    p_user_name VARCHAR(20), 
+    p_user_email VARCHAR(30), 
+    p_password VARCHAR(2000)
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_user_id INTEGER;
+BEGIN
+    -- Check if username already exists
+    IF EXISTS (SELECT 1 FROM speeddemonschema.users WHERE username = p_user_name) THEN
+        RAISE EXCEPTION 'Username % already exists.', p_user_name;
+    END IF;
 
+    -- Check if email already exists
+    IF EXISTS (SELECT 1 FROM speeddemonschema.users WHERE email = p_user_email) THEN
+        RAISE EXCEPTION 'Email % already exists.', p_user_email;
+    END IF;
 
-CREATE OR REPLACE PROCEDURE InsertNewUser(p_user_name VARCHAR(20),
-                                                p_user_email VARCHAR(30),
-                                                p_password VARCHAR(20))
-    LANGUAGE plpgsql
-    AS $$
-        DECLARE
-            v_user_id INTEGER;
-        BEGIN
-            --Autoincrement v_user_id
-            v_user_id := nextval('speeddemonschema.user_id_seq');
+    -- Generate user ID with the next value of the sequence
+    v_user_id := nextval('speeddemonschema.user_id_seq');
 
-            INSERT INTO speeddemonschema.users (user_id, username, email, password)
-            VALUES(v_user_id, p_user_name,p_user_email, p_password );
-            EXCEPTION
-                WHEN OTHERS THEN
-                RAISE NOTICE 'Error occurred, Data Not Added: %', SQLERRM;
-                ROLLBACK;
-        END
-    $$;
+    -- Insert the new user
+    INSERT INTO speeddemonschema.users (user_id, username, email, password)
+    VALUES (v_user_id, p_user_name, p_user_email, p_password);
+
+    -- Optionally, return a success message
+    RAISE NOTICE 'User % created successfully with ID %', p_user_name, v_user_id;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE EXCEPTION 'Error occurred while adding user: %, %', SQLERRM, SQLSTATE;
+END
+$$;
 
 --IMPORTANT NOTE: Data must be read from user end in THIS order:
     --stating latitude
