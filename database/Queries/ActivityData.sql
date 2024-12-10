@@ -1,6 +1,7 @@
 SELECT
     activity_log.log_id AS "log_id",
     users.username AS "username",
+    activity_log.route_name AS "route_name",
     activity_log.mode_of_transport AS "mode_of_transport",  -- Ensure this column is in activity_log
     activity_log.time_elapsed AS "time_elapsed",  -- Renamed to avoid confusion with SQL TIME keyword
     activity_log.distance_traveled AS "distance_traveled",
