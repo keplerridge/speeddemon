@@ -130,6 +130,7 @@ app.post('/database/insertUser', async (req, res) => {
 // BEGIN INSERT ACTIVITY LOG
 app.post("/database/insertActivityLog", async (req, res) => {
   const {
+    routeName,
     userName,
     startLat,
     startLong,
@@ -165,6 +166,7 @@ app.post("/database/insertActivityLog", async (req, res) => {
 
     // Execute the query with parameters
     await pool.query(query, [
+      routeName,
       userName,
       startLat,
       startLong,
