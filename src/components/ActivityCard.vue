@@ -24,6 +24,7 @@ export default {
                 //response.data = makes an array of objects from the response
                 //.map() = creates a new arrray with the shortened names as specified on the left hand side of the request
                 this.activityInfo = response.data.map (activity => ({
+                    routename: activity.routename,
                     username: activity.username,
                     email: activity.email,
                     password: activity.password,
