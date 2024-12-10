@@ -31,6 +31,7 @@
   </template>
   
   <script>
+  import { useUserStore } from '../stores/store';
   import bcrypt from 'bcryptjs';
   
   export default {
@@ -64,13 +65,13 @@
               this.message = 'Login successful.';
               this.messageClass = 'success-message';
               this.clearForm();
+
+              const userStore = useUserStore();
+              userStore.setUser(data.username, data.user_id)
               console.log(data);
-              // Store username and userId in localStorage
-              localStorage.setItem('username', data.username);  // Store username
-              localStorage.setItem('user_id', data.user_id);      // Store userId
+              console.log(userStore.username);
+
               this.$router.push('/dashboard');
-              // Optionally, you can redirect the user to another page after successful login:
-              // this.$router.push('/dashboard');
             } else {
               this.message = 'Invalid password.';
               this.messageClass = 'error-message';

@@ -1,5 +1,19 @@
 <script>
-// imports here
+  import { useUserStore } from '../stores/store';
+  import { useRouter } from 'vue-router';
+
+  export default {
+  setup() {
+    const userStore = useUserStore();
+    const router = useRouter();
+    
+    userStore.clearUser();
+
+    setTimeout(() => {
+      router.push('/');
+    }, 1000)
+  }
+};
 </script>
 
 <template>
