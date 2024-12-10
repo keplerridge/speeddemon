@@ -25,7 +25,7 @@ export default {
                 //.map() = creates a new arrray with the shortened names as specified on the left hand side of the request
 
                 this.activityInfo = response.data.map (activity => ({
-                    routename: activity.routename,
+                    routename: activity.route_name,
                     username: activity.username,
                     distance: activity.distance_traveled,
                     timeElapsed: activity.time_elapsed,
@@ -52,7 +52,7 @@ export default {
                 v-for="activity in activityInfo"
                 :key="activity.id"
                 class="p-4 border rounded mb-2 bg-speedDemon-darkBlue border-speedDemon-red border-x-speedDemon-lightBlue border-4 border-double" >
-                <p><strong class="italic underline text-g uppercase text-speedDemon-orange flex justify-center items-center">Route Name:</strong> {{ activity.routename }}</p>
+                <p><strong class="italic text-2xl uppercase text-speedDemon-lightBlue flex justify-center items-center "> {{ activity.routename }}</strong></p>
                 <p><strong class="italic underline text-lg uppercase text-speedDemon-orange">Username:</strong> {{ activity.username }}</p>
                 <p><strong class="italic underline text-lg uppercase text-speedDemon-orange">Distance:</strong> {{ activity.distance }} miles </p>
                 <p><strong class="italic underline text-lg uppercase text-speedDemon-orange">Time:</strong> {{ activity.timeElapsed }}</p>
