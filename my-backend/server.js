@@ -38,11 +38,6 @@ const pool = new Pool({
 //Handels CORS request which deals with using two different ports
 // (3000 for the front end stuff, but 5173 for 'dev' location)
 
-//gives a path where the it can read a Query from
-const getActivityInfoQuery = fs.readFileSync(
-  path.join(__dirname, "../database/Queries", "ActivityData.sql"),
-  "utf-8"
-);
 
 //Generalized SQL Query Loader Function that accepts param queryName which gets assignment in app.get().
 //Path is given to 'Queries' folder in the database fold, and then the function loads 'queryName.sql'
@@ -130,7 +125,6 @@ app.post('/database/insertUser', async (req, res) => {
 // BEGIN INSERT ACTIVITY LOG
 app.post("/database/insertActivityLog", async (req, res) => {
   const {
-    routeName,
     userName,
     startLat,
     startLong,
