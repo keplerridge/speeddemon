@@ -111,6 +111,7 @@ $$;
     --mode of transport
 
 CREATE OR REPLACE PROCEDURE InsertActivityLogData(
+                             p_route_name varchar(30),
                              p_username varchar(20),
                              p_start_position speeddemonschema.latlang,
                              p_end_position speeddemonschema.latlang,
@@ -135,8 +136,8 @@ CREATE OR REPLACE PROCEDURE InsertActivityLogData(
                 FROM speeddemonschema.users
                 WHERE username = p_username;
 
-             INSERT INTO speeddemonschema.activity_log (log_id, mode_of_transport, user_id, time_elapsed, distance_traveled)
-                 VALUES (v_log_id, p_mode_of_transport, v_user_id, p_time_elapsed, null);
+             INSERT INTO speeddemonschema.activity_log (log_id, mode_of_transport, user_id, time_elapsed, distance_traveled, route_name)
+                 VALUES (v_log_id, p_mode_of_transport, v_user_id, p_time_elapsed, null, p_route_name);
 
              INSERT INTO speeddemonschema.location_tracker (log_id, start_point, end_point)
                  VALUES (v_log_id, p_start_position, p_end_position);
