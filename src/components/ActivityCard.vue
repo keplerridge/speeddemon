@@ -48,6 +48,7 @@ export default {
                 v-for="activity in activityInfo"
                 :key="activity.id"
                 class="p-4 border rounded mb-2 bg-speedDemon-darkBlue border-speedDemon-red border-x-speedDemon-lightBlue border-4 border-double" >
+                <p class="italic underline text-g uppercase text-speedDemon-orange flex justify-center items-center">routename {{ activity.routename }}</p>
                 <p><strong class="italic underline text-lg uppercase text-speedDemon-orange">Username:</strong> {{ activity.username }}</p>
                 <p><strong class="italic underline text-lg uppercase text-speedDemon-orange">Distance:</strong> {{ activity.distance }}</p>
                 <p><strong class="italic underline text-lg uppercase text-speedDemon-orange">Time:</strong> {{ activity.timeElapsed }}</p>
