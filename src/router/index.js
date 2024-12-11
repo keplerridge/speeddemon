@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useUserStore } from '../stores/store';
 import Dashboard from "../views/Dashboard.vue";
 import LoginView from "../views/LoginView.vue";
 import Logout from "../views/Logout.vue";
@@ -29,14 +30,16 @@ const router = createRouter({
       component: SignUp,
     },
     {
-      path: "/",
+      path: "/dashboard",
       name: "dashboard",
       component: Dashboard,
+      meta: { requiresAuth: true},
     },
     {
       path: "/new-activity",
       name: "new-activity",
       component: NewActivity,
+      meta: { requiresAuth: true},
     },
     {
       path: "/activity-details/:id",
@@ -53,13 +56,12 @@ const router = createRouter({
       path: "/:catchAll(.*)",
       name: "NotFound",
       component: NotFound,
-      path: "/about",
-      name: "about",
     },
     {
       path: "/timer",
       name: "timer",
-      component: () => import("../components/Timer.vue"),
+      component: () => import('../components/Timer.vue'), // Dynamic import
+      meta: { requiresAuth: true},
     },
     {
       path: "/register",
@@ -67,11 +69,28 @@ const router = createRouter({
       component: RegisterUser,
     },
     {
-      path: "/login",
+      path: "/",
       name: "login",
       component: Login,
     },
   ],
+});
+
+// Add a global before guard to check if the user is authenticated
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore();
+  
+  // If the route requires authentication
+  if (to.meta.requiresAuth) {
+    // Check if the user is logged in using the getter from the Pinia store
+    if (!userStore.isUserLoggedIn) {
+      // If not, redirect to the login page
+      return next('/');
+    }
+  }
+
+  // Proceed to the requested route if the check passes
+  next();
 });
 
 export default router;

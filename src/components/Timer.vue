@@ -56,14 +56,23 @@
 
 <script>
 import axios from "axios";
+import { useUserStore } from '../stores/store';
+import { onMounted } from "vue";
+let universalUsername = "";
 
 export default {
+  setup() {
+    const userStore = useUserStore();
+    console.log('Username in Timer:', userStore.username); // Debug the value here.
+    return { userStore };
+  },
   data() {
     return {
       time: 0, // Add this line to define 'time' property
       interval: null,
       startCoords: { lat: null, lng: null },
       stopCoords: { lat: null, lng: null },
+      modeOfTransport: '',
     };
   },
   computed: {
@@ -151,32 +160,32 @@ export default {
       const endLat = data.stopCoords.lat;
       const endLong = data.stopCoords.lng;
 
+      console.log(this.userStore.username);
+      // debugger;
+
       console.log("Sending Data to Database", {
-        userName: localStorage.getItem("username"),
+        userName: this.userStore.username,
         startLat,
         startLong,
         endLat,
         endLong,
         timeElapsed: data.time,
-        modeOfTransport,
+        modeOfTransport: this.modeOfTransport,
       });
 
       axios
         .post("http://localhost:3000/database/insertActivityLog", {
-          userName: localStorage.getItem("username"),
+          userName: this.userStore.username,
           startLat,
           startLong,
           endLat,
           endLong,
           timeElapsed: data.time,
-          modeOfTransport,
+          modeOfTransport: this.modeOfTransport,
         })
 
         .then((response) => {
-          console.log(
-            "Data saved to the database successfully:",
-            response.data
-          );
+          console.log("Data saved to the database successfully:",response.data);
         })
         .catch((error) => {
           console.error("Error saving data to the database:", error);
