@@ -11,4 +11,5 @@ FROM speeddemonschema.activity_log AS activity_log
 JOIN speeddemonschema.location_tracker AS location_tracker
     ON activity_log.log_id = location_tracker.log_id
 JOIN speeddemonschema.users AS users
-    ON activity_log.user_id = users.user_id;
+    ON activity_log.user_id = users.user_id
+ORDER BY log_id desc;
