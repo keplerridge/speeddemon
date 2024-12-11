@@ -111,12 +111,12 @@ $$;
     --mode of transport
 
 CREATE OR REPLACE PROCEDURE InsertActivityLogData(
-                             p_route_name varchar(30),
                              p_username varchar(20),
                              p_start_position speeddemonschema.latlang,
                              p_end_position speeddemonschema.latlang,
                              p_time_elapsed TIME,
-                             p_mode_of_transport VARCHAR(20)
+                             p_mode_of_transport VARCHAR(20),
+                             p_route_name varchar(30)
                             )
 
      LANGUAGE plpgsql

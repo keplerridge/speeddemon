@@ -23,6 +23,17 @@
         class="p-2 rounded-md text-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-500"
       />
     </div>
+    <div>
+      <label for="mode" class="text-lg font-semibold text-gray-300"
+      >Route Name: </label>
+      <input
+        v-model="routeName"
+        type="text"
+        id="mode"
+        placeholder="Enter name of route"
+        class="p-2 rounded-md text-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+      />
+    </div>
 
     <!-- Control Buttons -->
     <div class="flex justify-center gap-4">
@@ -73,6 +84,7 @@ export default {
       startCoords: { lat: null, lng: null },
       stopCoords: { lat: null, lng: null },
       modeOfTransport: '',
+      routeName: '',
     };
   },
   computed: {
@@ -171,6 +183,7 @@ export default {
         endLong,
         timeElapsed: data.time,
         modeOfTransport: this.modeOfTransport,
+        routeName: this.routeName,
       });
 
       axios
@@ -182,6 +195,7 @@ export default {
           endLong,
           timeElapsed: data.time,
           modeOfTransport: this.modeOfTransport,
+          routeName: this.routeName,
         })
 
         .then((response) => {

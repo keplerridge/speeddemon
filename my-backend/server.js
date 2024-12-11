@@ -132,7 +132,10 @@ app.post("/database/insertActivityLog", async (req, res) => {
     endLong,
     timeElapsed,
     modeOfTransport,
+    routeName,
   } = req.body;
+
+  
 
   // Validate required fields
   if (
@@ -142,7 +145,8 @@ app.post("/database/insertActivityLog", async (req, res) => {
     endLat === undefined ||
     endLong === undefined ||
     !timeElapsed ||
-    !modeOfTransport
+    !modeOfTransport ||
+    !routeName
   ) {
     return res.status(400).send("All fields are required");
   }
@@ -150,17 +154,17 @@ app.post("/database/insertActivityLog", async (req, res) => {
   try {
     const query = `
             CALL InsertActivityLogData(
-                $1, 
+                $1::text, 
                 MakeLatLangDataPoint($2, $3),
                 MakeLatLangDataPoint($4, $5),
-                $6, 
-                $7
+                $6::time, 
+                $7::text,
+                $8::text
             );
         `;
 
     // Execute the query with parameters
     await pool.query(query, [
-      routeName,
       userName,
       startLat,
       startLong,
@@ -168,11 +172,13 @@ app.post("/database/insertActivityLog", async (req, res) => {
       endLong,
       timeElapsed,
       modeOfTransport,
+      routeName,
     ]);
 
     res.status(200).send("Activity log inserted successfully");
   } catch (error) {
     console.error("Error executing query:", error);
+    console.log(req.body);
     res.status(500).send("Server error");
   }
 });
