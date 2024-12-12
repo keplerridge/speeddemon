@@ -1,11 +1,10 @@
-const express = require('express');
-const fs = require('fs'); //fs means filesystem
-const path = require('path');
-const { Pool } = require('pg');
-const cors = require('cors');
-const env = require('dotenv').config();
-const bcrypt = require('bcrypt'); // used for hashing password
-
+const express = require("express");
+const fs = require("fs"); //fs means filesystem
+const path = require("path");
+const { Pool } = require("pg");
+const cors = require("cors");
+const env = require("dotenv").config();
+const bcrypt = require("bcrypt"); // used for hashing password
 
 const app = express();
 const port = 3000;
@@ -26,7 +25,6 @@ console.log({
 //////////////////////////////////////////////
 //Opens a "pool" where the database conneciton is stored
 const pool = new Pool({
-
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
   password: process.env.DB_PASSWORD,
@@ -98,28 +96,28 @@ app.get("/database/query", async (req, res) => {
     errors are caught*/
 
 // BEGIN INSERT NEW USER
-app.post('/database/insertUser', async (req, res) => {
-    const { username, email, password } = req.body;
+app.post("/database/insertUser", async (req, res) => {
+  const { username, email, password } = req.body;
 
-    // Validate required fields
-    if (!username || !email || !password) {
-        return res.status(400).json('All fields are required');
-    }
+  // Validate required fields
+  if (!username || !email || !password) {
+    return res.status(400).json("All fields are required");
+  }
 
-    try {
-        // Hash the password before saving to the database
-        const hashedPassword = await bcrypt.hash(password, 10);
+  try {
+    // Hash the password before saving to the database
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-        const query = `CALL InsertNewUser($1, $2, $3);`;
+    const query = `CALL InsertNewUser($1, $2, $3);`;
 
-        // Execute the query with the hashed password
-        const result = await pool.query(query, [username, email, hashedPassword]);
+    // Execute the query with the hashed password
+    const result = await pool.query(query, [username, email, hashedPassword]);
 
-        res.status(200).json('User inserted successfully');
-    } catch (error) {
-        console.error('Error executing query:', error);
-        res.status(500).json('Server error');
-    }
+    res.status(200).json("User inserted successfully");
+  } catch (error) {
+    console.error("Error executing query:", error);
+    res.status(500).json("Server error");
+  }
 });
 
 // BEGIN INSERT ACTIVITY LOG
@@ -183,57 +181,59 @@ app.post("/database/insertActivityLog", async (req, res) => {
   }
 });
 
-app.get('/database/getAllUsers', async (req, res) => {
-    try {
-        const result = await pool.query('SELECT * FROM speeddemonschema.users');
-        console.log(result); // Log the query result to see if it returns the data
-        res.json(result.rows);
-    } catch (error) {
-        console.error('Error fetching users:', error); // Log the actual error
-        res.status(500).json('Server error');
-    }
+app.get("/database/getAllUsers", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM speeddemonschema.users");
+    console.log(result); // Log the query result to see if it returns the data
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching users:", error); // Log the actual error
+    res.status(500).json("Server error");
+  }
 });
 
-app.get('/database/getUser', async (req, res) => {
+app.get("/database/getUser", async (req, res) => {
   try {
     // Extract the input (username or email) from the query parameters
     const input = req.query.input;
 
     if (!input) {
-      return res.status(400).send({ message: 'Input is required' });
+      return res.status(400).send({ message: "Input is required" });
     }
 
     // Perform the query directly to get user data based on the input
     const result = await pool.query(
-      'SELECT user_id, username, email, password FROM speeddemonschema.users WHERE username = $1 OR email = $1',
-      [input]  // Pass the input parameter for dynamic querying
+      "SELECT user_id, username, email, password FROM speeddemonschema.users WHERE username = $1 OR email = $1",
+      [input] // Pass the input parameter for dynamic querying
     );
 
     // Check if a user was found
     if (result.rows.length > 0) {
-      res.status(200).json(result.rows[0]);  // Send the first matching user as response
+      res.status(200).json(result.rows[0]); // Send the first matching user as response
     } else {
-      res.status(404).send({ message: 'User not found' });
+      res.status(404).send({ message: "User not found" });
     }
   } catch (error) {
-    console.error('Error fetching user:', error);
-    res.status(500).send({ message: 'An error occurred while fetching the user.' });
+    console.error("Error fetching user:", error);
+    res
+      .status(500)
+      .send({ message: "An error occurred while fetching the user." });
   }
 });
 
-app.post('/auth/login', async (req, res) => {
+app.post("/auth/login", async (req, res) => {
   const { username, password } = req.body;
 
   // Validate input
   if (!username || !password) {
-    return res.status(400).json('Username and password are required');
+    return res.status(400).json("Username and password are required");
   }
 
   try {
     // Query the database for the user based on username or email
     const result = await pool.query(
-      'SELECT user_id, username, email, password FROM speeddemonschema.users WHERE username = $1 OR email = $1',
-      [username]  // Use the username (or email) to query the database
+      "SELECT user_id, username, email, password FROM speeddemonschema.users WHERE username = $1 OR email = $1",
+      [username] // Use the username (or email) to query the database
     );
 
     if (result.rows.length > 0) {
@@ -245,21 +245,21 @@ app.post('/auth/login', async (req, res) => {
       if (isPasswordValid) {
         // Password is correct, you can send a success response or generate a JWT token if needed
         res.status(200).json({
-          message: 'Login successful',
+          message: "Login successful",
           userId: user.user_id,
           username: user.username,
         });
       } else {
         // Invalid password
-        res.status(401).json('Invalid credentials');
+        res.status(401).json("Invalid credentials");
       }
     } else {
       // User not found
-      res.status(404).json('User not found');
+      res.status(404).json("User not found");
     }
   } catch (error) {
-    console.error('Error logging in:', error);
-    res.status(500).json('Server error');
+    console.error("Error logging in:", error);
+    res.status(500).json("Server error");
   }
 });
 
@@ -267,5 +267,3 @@ app.post('/auth/login', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
-
-

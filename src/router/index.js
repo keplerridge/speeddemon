@@ -8,7 +8,8 @@ import NewActivity from "../views/NewActivity.vue";
 import TestForSending from "../views/TestForSending.vue";
 import NotFound from "../views/NotFound.vue";
 import RegisterUser from "../components/RegisterUser.vue";
-import Login from '../components/Login.vue';
+import Login from "../components/Login.vue";
+import ActivityDetails from "../views/ActivityDetails.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,6 +42,12 @@ const router = createRouter({
       meta: { requiresAuth: true},
     },
     {
+      path: "/activity-details/:id",
+      name: "activity-details",
+      component: ActivityDetails,
+      props: true,
+    },
+    {
       path: "/TestForSending",
       name: "TestForSending",
       component: TestForSending,
@@ -59,13 +66,13 @@ const router = createRouter({
     {
       path: "/register",
       name: "register",
-      component: RegisterUser
+      component: RegisterUser,
     },
     {
       path: "/",
       name: "login",
-      component: Login
-    }
+      component: Login,
+    },
   ],
 });
 
