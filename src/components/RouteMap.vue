@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div ref="map" style="height: 400px; width: 100%"></div>
+    <div
+      ref="map"
+      style="height: 400px; width: 100%"
+      class="rounded mb-8"
+    ></div>
   </div>
 </template>
 
