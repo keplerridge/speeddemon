@@ -9,58 +9,54 @@
       >
         <!-- Display Username -->
         <div class="activity-item mb-4">
-          <strong class="text-lg font-medium text-speedDemon-lightBlue">
-            Username:
-          </strong>
+          <strong class="text-lg font-medium text-speedDemon-lightBlue"
+            >User Name:</strong
+          >
           <span class="ml-2 text-white">{{ activityInfo.username }}</span>
         </div>
 
         <!-- Display Coordinates -->
         <div class="activity-item mb-4">
-          <strong class="text-lg font-medium text-speedDemon-lightBlue">
-            Start Location:
-          </strong>
-          <span class="ml-2 text-white">
-            {{ activityInfo.start_point }}, {{ activityInfo.startLong }}
-          </span>
+          <strong class="text-lg font-medium text-speedDemon-lightBlue"
+            >Start Location:</strong
+          >
+          <span class="ml-2 text-white">{{ activityInfo.start_point }}</span>
         </div>
 
         <div class="activity-item mb-4">
-          <strong class="text-lg font-medium text-speedDemon-lightBlue">
-            End Location:
-          </strong>
-          <span class="ml-2 text-white">
-            {{ activityInfo.end_point }}, {{ activityInfo.endLong }}
-          </span>
+          <strong class="text-lg font-medium text-speedDemon-lightBlue"
+            >End Location:</strong
+          >
+          <span class="ml-2 text-white">{{ activityInfo.end_point }}</span>
         </div>
 
         <!-- Display Time Elapsed -->
         <div class="activity-item mb-4">
-          <strong class="text-lg font-medium text-speedDemon-lightBlue">
-            Time Elapsed:
-          </strong>
+          <strong class="text-lg font-medium text-speedDemon-lightBlue"
+            >Time Elapsed:</strong
+          >
           <span class="ml-2 text-white">{{ activityInfo.time_elapsed }}</span>
         </div>
 
         <!-- Display Mode of Transport -->
         <div class="activity-item mb-4">
-          <strong class="text-lg font-medium text-speedDemon-lightBlue">
-            Mode of Transport:
-          </strong>
-          <span class="ml-2 text-white">
-            {{ activityInfo.mode_of_transport }}
-          </span>
+          <strong class="text-lg font-medium text-speedDemon-lightBlue"
+            >Mode of Transport:</strong
+          >
+          <span class="ml-2 text-white">{{
+            activityInfo.mode_of_transport
+          }}</span>
         </div>
       </div>
 
-      <!-- Right Column for Map -->
-      <div class="flex-1">
+      <!-- Right Column for Route Map (appears on desktop) -->
+      <div
+        class="flex-1"
+        v-if="activityInfo.start_point && activityInfo.end_point"
+      >
         <RouteMap
-          :startLat="activityInfo.startLat"
-          :startLong="activityInfo.startLong"
-          :endLat="activityInfo.endLat"
-          :endLong="activityInfo.endLong"
-          :modeOfTransport="activityInfo.modeOfTransport"
+          :startPoint="activityInfo.start_point"
+          :endPoint="activityInfo.end_point"
         />
       </div>
     </div>
@@ -68,45 +64,41 @@
 </template>
 
 <script>
-// Import the RouteMap component
 import RouteMap from "../components/RouteMap.vue";
 import axios from "axios";
 
 export default {
   name: "ActivityDetails",
   components: {
-    RouteMap, // Register the RouteMap component
+    RouteMap,
   },
   data() {
     return {
-      activityInfo: {}, // Store the activity data
+      activityInfo: {},
     };
   },
   created() {
-    // Fetch activity details based on the 'id' route parameter
     this.fetchActivityDetails();
   },
   methods: {
     async fetchActivityDetails() {
       try {
-        const activityId = this.$route.params.id; // Get the id from the URL
+        const activityId = this.$route.params.id;
         console.log(`activity ID = ${activityId}`);
 
-        // Fetch all the activity data
         const response = await axios.get(
           `http://localhost:3000/database/query?queryName=ActivityData`
         );
 
-        // Filter the data based on the activityId
         const filteredData = response.data.filter(
           (item) => item.log_id == activityId
         );
 
         if (filteredData.length > 0) {
           this.activityInfo = filteredData[0];
-          console.log(
-            " the data issss________________" + this.activityInfo.start_point
-          ); // Assuming `id` is unique, take the first matching item
+          // Log start_point and end_point
+          console.log("Start Point:", this.activityInfo.start_point);
+          console.log("End Point:", this.activityInfo.end_point);
         } else {
           console.error("No activity found for the given ID");
         }
