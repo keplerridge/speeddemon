@@ -42,13 +42,12 @@ export default {
 </script>
 
 <template>
-  <div class="text-center">
-    <h2 class="text-xl font-bold mb-4">Activity Data</h2>
-    <ul>
-      <li
+  <div class="mt-5">
+    <div class="flex flex-wrap justify-center gap-4">
+      <div
         v-for="activity in activityInfo"
         :key="activity.activity_id"
-        class="p-4 rounded mb-2 bg-speedDemon-darkBlue border-speedDemon-red border-x-speedDemon-lightBlue border-4 border-double"
+        class="p-4 rounded mb-2 bg-speedDemon-darkBlue border-speedDemon-red border-x-speedDemon-lightBlue border-4 border-double w-72"
       >
         <!-- Wrap in a router-link for navigation -->
         <router-link
@@ -59,7 +58,7 @@ export default {
         >
           <p>
             <strong
-              class="italic text-2xl uppercase text-speedDemon-lightBlue flex justify-center items-center"
+              class="italic text-2xl uppercase text-speedDemon-lightBlue flex justify-center text-center"
               >{{ activity.routeName }}</strong
             >
           </p>
@@ -92,7 +91,7 @@ export default {
             {{ activity.modeOfTransport }}
           </p>
         </router-link>
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 </template>

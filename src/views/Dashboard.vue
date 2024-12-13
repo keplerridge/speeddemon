@@ -1,4 +1,3 @@
-//
 <script>
 import ActivityCard from "../components/ActivityCard.vue";
 
@@ -11,9 +10,14 @@ export default {
 </script>
 
 <template>
-  <h1 class="text-5xl text-speedDemon-lightBlue text-center p-3">Public Dashboard</h1>
-  <h3 class="text-3xl text-speedDemon-lightBlue text-center">View Recent Speed Demons</h3>
-  <main class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+  <main class="mb-20">
+    <h1 class="text-5xl text-speedDemon-lightBlue text-center p-3">
+      Public Dashboard
+    </h1>
+
+    <h3 class="text-3xl text-speedDemon-lightBlue text-center">
+      View Recent Speed Demons
+    </h3>
     <ActivityCard />
   </main>
 </template>
