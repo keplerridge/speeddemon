@@ -58,6 +58,12 @@ export default {
         >
           <p>
             <strong
+              class="italic text-2xl uppercase text-speedDemon-lightBlue flex justify-center items-center"
+              >{{ activity.routename }}</strong
+            >
+          </p>
+          <p>
+            <strong
               class="italic underline text-lg uppercase text-speedDemon-orange"
               >Username:</strong
             >

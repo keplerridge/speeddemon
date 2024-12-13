@@ -1,52 +1,64 @@
 <template>
-  <div class="activity-details p-6 max-w-6xl mx-auto">
+  <div class="activity-details max-w-6xl mx-auto my-10">
     <h1 class="text-3xl font-semibold text-center mb-6">Activity Details</h1>
 
-    <!-- Display Username -->
-    <div class="activity-item mb-4">
-      <strong class="text-lg font-medium text-speedDemon-lightBlue"
-        >User Name:</strong
+    <div class="flex flex-col md:flex-row">
+      <!-- Left Column for Activity Details -->
+      <div
+        class="flex-1 mb-6 md:mb-0 md:pr-6 md:max-w-2xl md:text-center md:mt-10"
       >
-      <span class="ml-2 text-white">{{ activityInfo.username }}</span>
-    </div>
+        <!-- Display Username -->
+        <div class="activity-item mb-4">
+          <strong class="text-lg font-medium text-speedDemon-lightBlue"
+            >User Name:</strong
+          >
+          <span class="ml-2 text-white">{{ activityInfo.username }}</span>
+        </div>
 
-    <!-- Display Coordinates -->
-    <div class="activity-item mb-4">
-      <strong class="text-lg font-medium text-speedDemon-lightBlue"
-        >Start Location:</strong
+        <!-- Display Coordinates -->
+        <div class="activity-item mb-4">
+          <strong class="text-lg font-medium text-speedDemon-lightBlue"
+            >Start Location:</strong
+          >
+          <span class="ml-2 text-white">{{ activityInfo.start_point }}</span>
+        </div>
+
+        <div class="activity-item mb-4">
+          <strong class="text-lg font-medium text-speedDemon-lightBlue"
+            >End Location:</strong
+          >
+          <span class="ml-2 text-white">{{ activityInfo.end_point }}</span>
+        </div>
+
+        <!-- Display Time Elapsed -->
+        <div class="activity-item mb-4">
+          <strong class="text-lg font-medium text-speedDemon-lightBlue"
+            >Time Elapsed:</strong
+          >
+          <span class="ml-2 text-white">{{ activityInfo.time_elapsed }}</span>
+        </div>
+
+        <!-- Display Mode of Transport -->
+        <div class="activity-item mb-4">
+          <strong class="text-lg font-medium text-speedDemon-lightBlue"
+            >Mode of Transport:</strong
+          >
+          <span class="ml-2 text-white">{{
+            activityInfo.mode_of_transport
+          }}</span>
+        </div>
+      </div>
+
+      <!-- Right Column for Route Map (appears on desktop) -->
+      <div
+        class="flex-1"
+        v-if="activityInfo.start_point && activityInfo.end_point"
       >
-      <span class="ml-2 text-white">{{ activityInfo.start_point }}</span>
-    </div>
-
-    <div class="activity-item mb-4">
-      <strong class="text-lg font-medium text-speedDemon-lightBlue"
-        >End Location:</strong
-      >
-      <span class="ml-2 text-white">{{ activityInfo.end_point }}</span>
-    </div>
-
-    <!-- Display Time Elapsed -->
-    <div class="activity-item mb-4">
-      <strong class="text-lg font-medium text-speedDemon-lightBlue"
-        >Time Elapsed:</strong
-      >
-      <span class="ml-2 text-white">{{ activityInfo.time_elapsed }}</span>
-    </div>
-
-    <!-- Display Mode of Transport -->
-    <div class="activity-item mb-4">
-      <strong class="text-lg font-medium text-speedDemon-lightBlue"
-        >Mode of Transport:</strong
-      >
-      <span class="ml-2 text-white">{{ activityInfo.mode_of_transport }}</span>
-    </div>
-
-    <!-- Route Map Component -->
-    <div v-if="activityInfo.start_point && activityInfo.end_point">
-      <RouteMap
-        :startPoint="activityInfo.start_point"
-        :endPoint="activityInfo.end_point"
-      />
+        <RouteMap
+          :startPoint="activityInfo.start_point"
+          :endPoint="activityInfo.end_point"
+        />
+      </div>
     </div>
   </div>
 </template>

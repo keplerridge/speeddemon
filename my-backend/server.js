@@ -36,11 +36,6 @@ const pool = new Pool({
 //Handels CORS request which deals with using two different ports
 // (3000 for the front end stuff, but 5173 for 'dev' location)
 
-//gives a path where the it can read a Query from
-const getActivityInfoQuery = fs.readFileSync(
-  path.join(__dirname, "../database/Queries", "ActivityData.sql"),
-  "utf-8"
-);
 
 //Generalized SQL Query Loader Function that accepts param queryName which gets assignment in app.get().
 //Path is given to 'Queries' folder in the database fold, and then the function loads 'queryName.sql'
@@ -135,7 +130,10 @@ app.post("/database/insertActivityLog", async (req, res) => {
     endLong,
     timeElapsed,
     modeOfTransport,
+    routeName,
   } = req.body;
+
+  
 
   // Validate required fields
   if (
@@ -145,7 +143,8 @@ app.post("/database/insertActivityLog", async (req, res) => {
     endLat === undefined ||
     endLong === undefined ||
     !timeElapsed ||
-    !modeOfTransport
+    !modeOfTransport ||
+    !routeName
   ) {
     return res.status(400).send("All fields are required");
   }
@@ -153,11 +152,12 @@ app.post("/database/insertActivityLog", async (req, res) => {
   try {
     const query = `
             CALL InsertActivityLogData(
-                $1, 
+                $1::text, 
                 MakeLatLangDataPoint($2, $3),
                 MakeLatLangDataPoint($4, $5),
-                $6, 
-                $7
+                $6::time, 
+                $7::text,
+                $8::text
             );
         `;
 
@@ -170,11 +170,13 @@ app.post("/database/insertActivityLog", async (req, res) => {
       endLong,
       timeElapsed,
       modeOfTransport,
+      routeName,
     ]);
 
     res.status(200).send("Activity log inserted successfully");
   } catch (error) {
     console.error("Error executing query:", error);
+    console.log(req.body);
     res.status(500).send("Server error");
   }
 });
