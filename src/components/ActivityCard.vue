@@ -31,6 +31,7 @@ export default {
           distance: activity.distance_traveled,
           timeElapsed: activity.time_elapsed,
           modeOfTransport: activity.mode_of_transport,
+          routeName: activity.route_name,
         })); // Store the response data in activities
       } catch (error) {
         console.error("Error fetching activity data:", error);
@@ -59,7 +60,7 @@ export default {
           <p>
             <strong
               class="italic text-2xl uppercase text-speedDemon-lightBlue flex justify-center items-center"
-              >{{ activity.routename }}</strong
+              >{{ activity.routeName }}</strong
             >
           </p>
           <p>
