@@ -7,7 +7,7 @@
         <li class="flex items-center space-x-2">
           <router-link
             to="/dashboard"
-            class="text-white no-underline hover:underline flex items-center"
+            class="text-speedDemon-lightBlue no-underline hover:underline flex items-center"
           >
             <img
               width="50"
@@ -23,7 +23,7 @@
         <li>
           <router-link
             to="/new-activity"
-            class="text-white no-underline hover:underline flex items-center"
+            class="text-speedDemon-orange no-underline hover:underline flex items-center"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +51,7 @@
           <li>
             <router-link
               to="/register"
-              class="text-white no-underline mr-4 hover:underline"
+              class="text-speedDemon-lightBlue no-underline mr-4 hover:underline"
             >
               New User
             </router-link>
@@ -59,7 +59,7 @@
           <li>
             <router-link
               to="/logout"
-              class="text-white no-underline mr-4 hover:underline"
+              class="text-speedDemon-orange no-underline mr-4 hover:underline"
             >
               Logout
             </router-link>
