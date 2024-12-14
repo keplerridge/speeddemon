@@ -1,35 +1,28 @@
-# speeddemon
+# Overview
 
-This template should help get you started developing with Vue 3 in Vite.
+SpeedDemon is a web app created Node.js, Vue3, Tailwind, and PostgresqlB.
+SpeedDemon allows users to save a route by tracking the start and end time and location data. This as well as route details and the mode of transport are saved and posted on a public form for others to view and try themselves.
 
-## Recommended IDE Setup
+[Software Demo Video](https://www.youtube.com/watch?v=PbuHH18ZP14&ab_channel=KeplerRidge)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+# Development Environment
 
-## Customize configuration
+This web app was created with Node.js, Vue3, Tailwind, Postgresql, and utilizes the Google Maps API to track location.
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+# Collaborators
 
-## Project Setup
+- Keaton Flake
+- Kepler Ridge
+- Hayden Harris
+- Scott Kishpaugh
 
-```sh
-npm install
-```
+# Useful Websites
 
-### Compile and Hot-Reload for Development
+- [Vue3 intro](https://vuejs.org/guide/introduction.html)
+- [Postgresql](https://www.postgresql.org/docs/)
 
-```sh
-npm run dev
-```
+# Future Work
 
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
+- We would like to add more features for user interactions like comments or the ability to save favorite routes.
+- We will add more precise location tracking.
+- We will add the ability to save more route details and possibly an image of the mode of transportation.
